@@ -1,309 +1,213 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompt Forge: Streamlined</title>
+    <title>Prompt Forge: Pro Edition</title>
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- VARIABLES & THEME --- */
         :root {
             --bg-color: #0b0c15;
             --card-bg: #151725;
-            --primary: #00f3ff; /* Cyberpunk Cyan */
-            --secondary: #bc13fe; /* Neon Purple */
+            --primary: #00f3ff;
+            --secondary: #bc13fe;
             --text-main: #e0e6ed;
             --text-muted: #94a3b8;
             --border-radius: 12px;
-            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; font-family: 'Segoe UI', sans-serif; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: var(--font-family);
-            display: flex;
-            flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(188, 19, 254, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 20%);
-        }
-
-        /* --- LAYOUT --- */
-        .container {
-            width: 100%;
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 20px;
-            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(188, 19, 254, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 20%);
         }
 
-        header { text-align: center; margin-bottom: 20px; }
-        
+        .container {
+            width: 100%; max-width: 650px; margin: 0 auto; padding: 20px;
+            flex: 1; display: flex; flex-direction: column; justify-content: center;
+        }
+
+        /* --- HEADER --- */
+        header { text-align: center; margin-bottom: 25px; }
         h1 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 2rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .subtitle { color: var(--text-muted); font-size: 0.9rem; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px; }
 
         /* --- PROGRESS --- */
         .progress-container { margin-bottom: 20px; }
-        .progress-track {
-            background: rgba(255, 255, 255, 0.1);
-            height: 4px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-        .step-indicator {
-            text-align: right; font-size: 0.75rem; color: var(--primary); margin-top: 5px; font-family: monospace;
-        }
+        .progress-track { background: rgba(255,255,255,0.1); height: 4px; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.4s ease; }
+        .step-indicator { text-align: right; font-size: 0.75rem; color: var(--primary); margin-top: 5px; font-family: monospace; }
 
-        /* --- WIZARD CARD --- */
+        /* --- CARD DESIGN --- */
         .wizard-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
+            background: var(--card-bg); padding: 30px; border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05);
+            min-height: 450px; display: flex; flex-direction: column; position: relative;
         }
 
-        .step {
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-            animation: fadeIn 0.4s ease;
-        }
+        .step { display: none; flex-direction: column; gap: 18px; animation: fadeIn 0.4s ease; }
         .step.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        label {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .helper-text {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
+        label { font-size: 1.1rem; font-weight: 600; color: #fff; display: block; margin-bottom: 8px; }
+        .icon { margin-right: 8px; }
+        .helper-text { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; line-height: 1.4; }
 
         /* --- INPUTS --- */
-        input[type="text"], select {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: var(--transition);
+        input[type="text"], select, textarea {
+            width: 100%; padding: 14px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+            color: #fff; font-size: 1rem; transition: var(--transition);
         }
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 243, 255, 0.15); }
+
+        /* --- PRESETS DROPDOWN --- */
+        .preset-badge {
+            background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
+            border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;
         }
 
-        /* --- CHECKBOX GROUPS (Step 1 Special) --- */
-        .checkbox-group {
-            margin-top: 15px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 15px;
+        /* --- OR DIVIDER --- */
+        .or-divider {
+            display: flex; align-items: center; text-align: center; color: var(--text-muted);
+            font-size: 0.8rem; font-weight: bold; margin: 15px 0;
         }
+        .or-divider::before, .or-divider::after {
+            content: ''; flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .or-divider::before { margin-right: 10px; }
+        .or-divider::after { margin-left: 10px; }
 
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 0;
-        }
-        .toggle-container:hover span { color: #fff; }
-        
+        /* --- CHECKBOX GROUPS --- */
+        .checkbox-group { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 15px; }
+        .toggle-container { display: flex; align-items: center; cursor: pointer; }
         input[type="checkbox"] {
-            appearance: none; width: 22px; height: 22px;
-            border: 2px solid var(--text-muted); border-radius: 6px;
-            margin-right: 12px; position: relative; cursor: pointer;
-            background: rgba(0,0,0,0.3);
-            transition: var(--transition);
+            appearance: none; width: 22px; height: 22px; border: 2px solid var(--text-muted);
+            border-radius: 6px; margin-right: 12px; position: relative; cursor: pointer; background: rgba(0,0,0,0.3);
         }
-        input[type="checkbox"]:checked {
-            background-color: var(--primary); border-color: var(--primary);
-        }
-        input[type="checkbox"]:checked::after {
-            content: '✓'; position: absolute; color: #000;
-            font-weight: bold; font-size: 16px; left: 4px; top: -2px;
-        }
-        .toggle-text { font-size: 0.95rem; color: var(--text-muted); transition: var(--transition); }
-        input[type="checkbox"]:checked + .toggle-text { color: var(--primary); font-weight: 500; }
-
-        /* Nested Human Checkbox */
-        .nested-checkbox {
-            display: none;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            animation: fadeIn 0.3s;
-        }
+        input[type="checkbox"]:checked { background-color: var(--primary); border-color: var(--primary); }
+        input[type="checkbox"]:checked::after { content: '✓'; position: absolute; color: #000; font-weight: bold; font-size: 16px; left: 4px; top: -2px; }
+        .nested-checkbox { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); animation: fadeIn 0.3s; }
         .nested-checkbox.show { display: block; }
 
-        /* --- CUSTOM INPUTS --- */
-        .custom-input-wrapper {
-            display: none;
-            margin-top: 10px;
-            padding-left: 10px;
-            border-left: 2px solid var(--secondary);
-            animation: fadeIn 0.3s;
-        }
-        .custom-input-wrapper.show { display: block; }
-
         /* --- ASPECT RATIO GRID --- */
-        .ar-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-        }
+        .ar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .ar-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px; border-radius: 8px; color: var(--text-muted);
-            cursor: pointer; transition: var(--transition); text-align: center;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px;
+            border-radius: 8px; color: var(--text-muted); cursor: pointer; text-align: center; transition: var(--transition);
         }
-        .ar-btn.selected {
-            background: rgba(0, 243, 255, 0.15); border-color: var(--primary);
-            color: var(--primary); font-weight: bold;
-        }
+        .ar-btn.selected { background: rgba(0, 243, 255, 0.15); border-color: var(--primary); color: var(--primary); font-weight: bold; }
 
-        /* --- BUTTONS --- */
-        .nav-buttons {
-            display: flex; justify-content: space-between; margin-top: auto; padding-top: 20px;
-        }
-        button {
-            padding: 12px 24px; border-radius: 8px; border: none;
-            font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition);
-        }
+        /* --- FOOTER & BUTTONS --- */
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: auto; padding-top: 20px; }
+        button { padding: 12px 24px; border-radius: 8px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
         .btn-back { background: transparent; color: var(--text-muted); }
         .btn-back:hover { color: #fff; }
         .btn-next { background: var(--primary); color: #000; }
         .btn-next:hover { background: #fff; box-shadow: 0 0 15px var(--primary); }
         .btn-finish { background: var(--secondary); color: #fff; }
 
-        /* --- PREVIEW BAR --- */
         .preview-bar {
-            position: sticky; bottom: 0; background: rgba(11, 12, 21, 0.95);
-            backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 15px 20px; z-index: 100;
+            position: sticky; bottom: 0; background: rgba(11, 12, 21, 0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.1); padding: 15px 20px; z-index: 100;
         }
-        .preview-text {
-            font-family: 'Courier New', monospace; color: var(--primary);
-            font-size: 0.9rem; line-height: 1.4; word-break: break-word;
-        }
+        .preview-text { font-family: 'Courier New', monospace; color: var(--primary); font-size: 0.9rem; line-height: 1.4; }
 
-        /* --- FINAL RESULT --- */
-        .final-screen {
-            display: none; flex-direction: column; gap: 20px; text-align: center;
-        }
+        /* --- FINAL SCREEN --- */
+        .final-screen { display: none; flex-direction: column; gap: 20px; text-align: center; animation: fadeIn 0.5s; }
         .final-screen.active { display: flex; }
-        .final-textarea { 
-            height: 150px; resize: none; font-family: monospace; 
-            background: rgba(0,0,0,0.4); border: 1px solid var(--primary);
-            color: #fff; padding: 15px; border-radius: 8px; width: 100%;
-        }
-        .action-row { display: flex; gap: 10px; width: 100%; }
-        .btn-copy { flex: 2; background: var(--primary); color: #000; }
-        .btn-reset { flex: 1; background: rgba(255,255,255,0.1); color: #fff; }
-
+        .final-textarea { height: 150px; resize: none; font-family: monospace; width: 100%; margin-bottom: 10px; }
+        .btn-copy { width: 100%; background: var(--primary); color: #000; margin-bottom: 10px; }
+        .btn-reset { width: 100%; background: rgba(255,255,255,0.1); color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>Prompt Forge</h1>
-            <div class="subtitle">AI Prompt Generator</div>
+            <h1>Prompt Forge Pro</h1>
+            <div class="subtitle">Advanced AI Architecture Tool</div>
         </header>
 
         <div class="progress-container">
-            <div class="progress-track">
-                <div class="progress-fill" id="progressBar"></div>
-            </div>
+            <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
             <div class="step-indicator">Step <span id="currentStepNum">1</span> of 9</div>
         </div>
 
         <div class="wizard-card">
             
             <div class="step active" data-step="1">
-                <label>Main Subject</label>
-                <div class="helper-text">Who or what is the main focus?</div>
-                <input type="text" id="inp-subject" placeholder="e.g. A cyberpunk samurai, A cute kitten" oninput="updatePrompt()">
+                <label><span class="icon">🚀</span>Quick Start</label>
+                
+                <div class="preset-badge">
+                    <div class="helper-text" style="color:var(--primary); font-weight:bold;">✨ Magic Preset Loader</div>
+                    <select id="sel-preset" onchange="applyPreset()" style="margin-top:5px; border-color:var(--secondary);">
+                        <option value="">No Preset (Clear / Custom)</option>
+                        <option value="cyberpunk">💠 Cyberpunk / Neon</option>
+                        <option value="ghibli">🍃 Studio Ghibli / Anime</option>
+                        <option value="cinematic">🎬 Cinematic / Realistic</option>
+                        <option value="painting">🎨 Oil Painting / Classic</option>
+                        <option value="3d">🎲 3D Render / Octane</option>
+                    </select>
+                </div>
 
-                <div class="checkbox-group">
+                <div class="or-divider">OR</div>
+
+                <label><span class="icon">🎯</span>Main Subject</label>
+                <input type="text" id="inp-subject" placeholder="e.g. A warrior, A cat, A landscape" oninput="updatePrompt()">
+
+                <div class="checkbox-group" style="margin-top:15px;">
                     <label class="toggle-container">
                         <input type="checkbox" id="chk-use-img" onchange="toggleHumanCheck(); updatePrompt()">
-                        <span class="toggle-text">I am attaching a Reference Image</span>
+                        <span>Attach Reference Image?</span>
                     </label>
-
                     <div class="nested-checkbox" id="human-toggle-area">
                         <label class="toggle-container">
                             <input type="checkbox" id="chk-is-human" onchange="updatePrompt()">
-                            <span class="toggle-text">This is a Human (Protect Face)</span>
+                            <span style="color:var(--primary)">Is Subject Human? (Face Protection)</span>
                         </label>
+                        <div class="helper-text" style="margin-top:5px;">*Ensures facial identity is preserved.</div>
                     </div>
                 </div>
             </div>
 
             <div class="step" data-step="2">
-                <label>Action & Pose</label>
-                <div class="helper-text">What are they doing?</div>
+                <label><span class="icon">🏃</span>Action / Context</label>
                 <input type="text" id="inp-action" placeholder="e.g. drinking coffee, fighting a dragon" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="3">
-                <label>Environment</label>
-                <select id="sel-env" onchange="handleCustomInput('sel-env', 'wrap-env'); updatePrompt()">
-                    <option value="">None / Select...</option>
+                <label><span class="icon">🌍</span>Environment</label>
+                <select id="sel-env" onchange="updatePrompt()">
+                    <option value="">Select...</option>
                     <option value="Cyberpunk City">Cyberpunk City</option>
                     <option value="Deep Forest">Deep Forest</option>
                     <option value="Space Station">Space Station</option>
-                    <option value="White Void">White Void / Studio</option>
+                    <option value="White Void">White Void</option>
                     <option value="Underwater">Underwater</option>
+                    <option value="Post-Apocalyptic">Post-Apocalyptic</option>
                     <option value="Custom">Custom...</option>
                 </select>
-                <div class="custom-input-wrapper" id="wrap-env">
-                    <input type="text" id="inp-env-custom" placeholder="Type custom environment..." oninput="updatePrompt()">
-                </div>
+                <input type="text" id="inp-env-custom" class="custom-input" placeholder="Custom Environment..." style="display:none; margin-top:10px;" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="4">
-                <label>Art Style / Medium</label>
-                <select id="sel-style" onchange="handleCustomInput('sel-style', 'wrap-style'); updatePrompt()">
-                    <option value="">None / Select...</option>
+                <label><span class="icon">🎨</span>Art Style</label>
+                <select id="sel-style" onchange="updatePrompt()">
+                    <option value="">Select...</option>
                     <option value="Photorealistic 8k">Photorealistic 8k</option>
                     <option value="Anime Style">Anime Style</option>
                     <option value="Oil Painting">Oil Painting</option>
@@ -311,58 +215,52 @@
                     <option value="Pixel Art">Pixel Art</option>
                     <option value="Custom">Custom...</option>
                 </select>
-                <div class="custom-input-wrapper" id="wrap-style">
-                    <input type="text" id="inp-style-custom" placeholder="Type custom style..." oninput="updatePrompt()">
-                </div>
+                <input type="text" id="inp-style-custom" class="custom-input" placeholder="Custom Style..." style="display:none; margin-top:10px;" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="5">
-                <label>Lighting</label>
-                <select id="sel-light" onchange="handleCustomInput('sel-light', 'wrap-light'); updatePrompt()">
-                    <option value="">None / Select...</option>
+                <label><span class="icon">💡</span>Lighting</label>
+                <select id="sel-light" onchange="updatePrompt()">
+                    <option value="">Select...</option>
                     <option value="Cinematic Lighting">Cinematic Lighting</option>
                     <option value="Natural Light">Natural Light</option>
                     <option value="Neon Lights">Neon Lights</option>
                     <option value="God Rays">God Rays</option>
+                    <option value="Studio Lighting">Studio Lighting</option>
                     <option value="Custom">Custom...</option>
                 </select>
-                <div class="custom-input-wrapper" id="wrap-light">
-                    <input type="text" id="inp-light-custom" placeholder="Type custom lighting..." oninput="updatePrompt()">
-                </div>
+                <input type="text" id="inp-light-custom" class="custom-input" placeholder="Custom Lighting..." style="display:none; margin-top:10px;" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="6">
-                <label>Camera & Angle</label>
-                <select id="sel-cam" onchange="handleCustomInput('sel-cam', 'wrap-cam'); updatePrompt()">
-                    <option value="">None / Select...</option>
+                <label><span class="icon">📸</span>Camera Angle</label>
+                <select id="sel-cam" onchange="updatePrompt()">
+                    <option value="">Select...</option>
                     <option value="Wide Angle">Wide Angle</option>
                     <option value="Macro Close-up">Macro Close-up</option>
                     <option value="Drone View">Drone View</option>
                     <option value="GoPro">GoPro</option>
                     <option value="Custom">Custom...</option>
                 </select>
-                <div class="custom-input-wrapper" id="wrap-cam">
-                    <input type="text" id="inp-cam-custom" placeholder="Type custom angle..." oninput="updatePrompt()">
-                </div>
+                <input type="text" id="inp-cam-custom" class="custom-input" placeholder="Custom Angle..." style="display:none; margin-top:10px;" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="7">
-                <label>Color Palette</label>
-                <select id="sel-color" onchange="handleCustomInput('sel-color', 'wrap-color'); updatePrompt()">
-                    <option value="">None / Select...</option>
+                <label><span class="icon">🌈</span>Colors</label>
+                <select id="sel-color" onchange="updatePrompt()">
+                    <option value="">Select...</option>
                     <option value="Vibrant">Vibrant</option>
                     <option value="Pastel">Pastel</option>
                     <option value="Monochromatic">Monochromatic</option>
                     <option value="Dark & Gritty">Dark & Gritty</option>
+                    <option value="Vaporwave">Vaporwave</option>
                     <option value="Custom">Custom...</option>
                 </select>
-                <div class="custom-input-wrapper" id="wrap-color">
-                    <input type="text" id="inp-color-custom" placeholder="Type custom palette..." oninput="updatePrompt()">
-                </div>
+                <input type="text" id="inp-color-custom" class="custom-input" placeholder="Custom Palette..." style="display:none; margin-top:10px;" oninput="updatePrompt()">
             </div>
 
             <div class="step" data-step="8">
-                <label>Aspect Ratio</label>
+                <label><span class="icon">📐</span>Aspect Ratio</label>
                 <div class="ar-grid">
                     <div class="ar-btn selected" onclick="setAspectRatio(this, '1:1')">1:1 Square</div>
                     <div class="ar-btn" onclick="setAspectRatio(this, '16:9')">16:9 Cinema</div>
@@ -372,71 +270,81 @@
             </div>
 
             <div class="step" data-step="9">
-                <label>Negative Prompt</label>
-                <div class="helper-text">What to exclude?</div>
+                <label><span class="icon">⛔</span>Negative Prompt</label>
                 <input type="text" id="inp-neg" placeholder="ugly, deformed, text, watermark" oninput="updatePrompt()">
             </div>
 
             <div class="final-screen" id="finalScreen">
-                <label style="color:var(--primary)">Your Prompt is Ready!</label>
+                <label style="color:var(--primary); font-size:1.5rem;">🎉 Prompt Ready</label>
                 <textarea class="final-textarea" id="finalResult" readonly></textarea>
-                <div class="action-row">
-                    <button class="btn-copy" onclick="copyToClipboard()">Copy</button>
-                    <button class="btn-reset" onclick="resetWizard()">New</button>
-                </div>
+                <button class="btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button class="btn-reset" onclick="location.reload()">Start New</button>
             </div>
 
             <div class="nav-buttons" id="navControls">
-                <button class="btn-back" id="btnBack" onclick="changeStep(-1)" style="visibility: hidden;">Back</button>
+                <button class="btn-back" id="btnBack" onclick="changeStep(-1)" style="visibility:hidden;">Back</button>
                 <button class="btn-next" id="btnNext" onclick="changeStep(1)">Next</button>
-                <button class="btn-finish" id="btnFinish" onclick="finishWizard()" style="display: none;">Generate</button>
+                <button class="btn-finish" id="btnFinish" onclick="finishWizard()" style="display:none;">Generate</button>
             </div>
 
         </div>
     </div>
 
     <div class="preview-bar">
-        <div style="font-size:0.7rem; color:#666; margin-bottom:5px; letter-spacing:1px; font-weight:bold;">LIVE PREVIEW</div>
+        <div style="font-size:0.7rem; color:#666; margin-bottom:5px; font-weight:bold;">LIVE PREVIEW</div>
         <div class="preview-text" id="livePreviewText">Start typing...</div>
     </div>
 
     <script>
-        // --- CONFIG ---
+        // --- LOGIC ---
         let currentStep = 1;
         const totalSteps = 9;
         let aspectRatio = "1:1";
 
-        // --- TOGGLE LOGIC ---
+        // --- PRESET DATA ---
+        const presets = {
+            cyberpunk: { env: "Cyberpunk City", style: "Cyberpunk Digital", light: "Neon Lights", cam: "Wide Angle", color: "Vibrant" },
+            ghibli: { env: "Deep Forest", style: "Anime Style", light: "Natural Light", cam: "Drone View", color: "Pastel" },
+            cinematic: { env: "Custom", style: "Photorealistic 8k", light: "Cinematic Lighting", cam: "Wide Angle", color: "Dark & Gritty" },
+            painting: { env: "Custom", style: "Oil Painting", light: "Studio Lighting", cam: "Custom", color: "Warm Tones" },
+            "3d": { env: "White Void", style: "3D Render (Octane)", light: "Studio Lighting", cam: "Macro Close-up", color: "Vibrant" }
+        };
+
+        function applyPreset() {
+            const val = document.getElementById('sel-preset').value;
+            
+            // RESET LOGIC
+            if (val === "") {
+                document.getElementById('sel-env').value = "";
+                document.getElementById('sel-style').value = "";
+                document.getElementById('sel-light').value = "";
+                document.getElementById('sel-cam').value = "";
+                document.getElementById('sel-color').value = "";
+                document.querySelectorAll('.custom-input').forEach(el => el.style.display = 'none');
+            }
+            // APPLY PRESET
+            else if (presets[val]) {
+                const p = presets[val];
+                if(p.env !== "Custom") document.getElementById('sel-env').value = p.env;
+                if(p.style !== "Custom") document.getElementById('sel-style').value = p.style;
+                if(p.light !== "Custom") document.getElementById('sel-light').value = p.light;
+                if(p.cam !== "Custom") document.getElementById('sel-cam').value = p.cam;
+                if(p.color) document.getElementById('sel-color').value = p.color;
+                
+                // Visual feedback
+                const b = document.querySelector('.preset-badge');
+                b.style.borderColor = "var(--primary)";
+                setTimeout(() => b.style.borderColor = "rgba(255,255,255,0.1)", 500);
+            }
+            updatePrompt();
+        }
+
         function toggleHumanCheck() {
             const useImg = document.getElementById('chk-use-img').checked;
-            const humanArea = document.getElementById('human-toggle-area');
-            const isHumanChk = document.getElementById('chk-is-human');
-
-            if(useImg) {
-                humanArea.classList.add('show');
-            } else {
-                humanArea.classList.remove('show');
-                isHumanChk.checked = false; // Reset if parent is unchecked
-            }
-        }
-
-        // --- GENERIC CUSTOM INPUT LOGIC ---
-        function handleCustomInput(selectId, wrapperId) {
-            const select = document.getElementById(selectId);
-            const wrapper = document.getElementById(wrapperId);
-            if(select.value === 'Custom') {
-                wrapper.classList.add('show');
-            } else {
-                wrapper.classList.remove('show');
-            }
-        }
-
-        function getDropdownValue(selectId, customInputId) {
-            const select = document.getElementById(selectId);
-            if (select.value === 'Custom') {
-                return document.getElementById(customInputId).value.trim();
-            }
-            return select.value;
+            const area = document.getElementById('human-toggle-area');
+            const humanChk = document.getElementById('chk-is-human');
+            if(useImg) area.classList.add('show');
+            else { area.classList.remove('show'); humanChk.checked = false; }
         }
 
         function setAspectRatio(el, ratio) {
@@ -446,124 +354,90 @@
             updatePrompt();
         }
 
-        // --- GENERATE STRING ---
-        function generatePromptString() {
-            // Get Checkbox States
+        function getVal(id) {
+            const el = document.getElementById(id);
+            if(el.tagName === 'SELECT' && el.value === 'Custom') {
+                const customInp = el.nextElementSibling;
+                customInp.style.display = 'block';
+                return customInp.value.trim();
+            } else if (el.tagName === 'SELECT') {
+                if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
+                return el.value;
+            }
+            return el.value.trim();
+        }
+
+        function generateString() {
+            const subject = getVal('inp-subject');
+            const action = getVal('inp-action');
+            const env = getVal('sel-env');
+            const style = getVal('sel-style');
+            const light = getVal('sel-light');
+            const cam = getVal('sel-cam');
+            const color = getVal('sel-color');
+            const neg = getVal('inp-neg');
+            
+            let parts = [subject, action, env, style, light, cam, color].filter(Boolean);
+            let prompt = parts.join(", ");
+
             const useImg = document.getElementById('chk-use-img').checked;
             const isHuman = document.getElementById('chk-is-human').checked;
 
-            // Get Text Parts
-            const subject = document.getElementById('inp-subject').value.trim();
-            const action = document.getElementById('inp-action').value.trim();
-            const env = getDropdownValue('sel-env', 'inp-env-custom');
-            const style = getDropdownValue('sel-style', 'inp-style-custom');
-            const light = getDropdownValue('sel-light', 'inp-light-custom');
-            const cam = getDropdownValue('sel-cam', 'inp-cam-custom');
-            const color = getDropdownValue('sel-color', 'inp-color-custom');
-            const neg = document.getElementById('inp-neg').value.trim();
-
-            let parts = [subject, action, env, style, light, cam, color];
-            let mainPrompt = parts.filter(Boolean).join(", ");
-
-            let finalString = mainPrompt;
-
-            // Logic: Append instructions based on checkboxes
             if (useImg) {
-                if (isHuman) {
-                    finalString += ", (maintain exact facial features of attached reference image:1.5), (identical face:1.4), (preserve identity)";
-                } else {
-                    finalString += ", (use attached reference image as structural base), (keep composition), transform style";
-                }
+                if (isHuman) prompt += ", (maintain exact facial features of attached reference image:1.5), (identical face:1.4), (preserve identity)";
+                else prompt += ", (use attached reference image as structural base), (keep composition), transform style";
             }
 
-            // Aspect Ratio & Negative
-            if(finalString.trim() !== "") {
-                finalString += ` --ar ${aspectRatio}`;
-                if (neg) finalString += ` --no ${neg}`;
+            if(prompt) {
+                prompt += ` --ar ${aspectRatio}`;
+                if(neg) prompt += ` --no ${neg}`;
             }
 
-            return finalString;
+            return prompt;
         }
 
         function updatePrompt() {
-            const str = generatePromptString();
-            document.getElementById('livePreviewText').innerText = str || "Enter a subject to begin...";
+            const s = generateString();
+            document.getElementById('livePreviewText').innerText = s || "Waiting for input...";
         }
 
-        // --- WIZARD NAV ---
+        // --- NAVIGATION ---
         function changeStep(n) {
-            // Validation
-            if (currentStep === 1 && n === 1) {
-                const subj = document.getElementById('inp-subject').value.trim();
-                if (!subj) {
-                    alert("Please enter a Subject first.");
-                    return;
-                }
+            if(currentStep === 1 && n === 1 && !document.getElementById('inp-subject').value) {
+                alert("Please enter a Subject first."); return;
             }
-
             const steps = document.querySelectorAll('.step');
             steps[currentStep-1].classList.remove('active');
-            
             currentStep += n;
-            if (currentStep < 1) currentStep = 1;
-            if (currentStep > totalSteps) currentStep = totalSteps;
-
+            if(currentStep < 1) currentStep = 1;
+            if(currentStep > totalSteps) currentStep = totalSteps;
             steps[currentStep-1].classList.add('active');
-            updateUI();
-        }
-
-        function updateUI() {
-            // Progress Bar
-            const pct = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            
+            const pct = ((currentStep-1)/(totalSteps-1))*100;
             document.getElementById('progressBar').style.width = `${pct}%`;
             document.getElementById('currentStepNum').innerText = currentStep;
-
-            // Buttons
-            const btnBack = document.getElementById('btnBack');
-            const btnNext = document.getElementById('btnNext');
-            const btnFinish = document.getElementById('btnFinish');
-
-            btnBack.style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
-
-            if(currentStep === totalSteps) {
-                btnNext.style.display = 'none';
-                btnFinish.style.display = 'block';
-            } else {
-                btnNext.style.display = 'block';
-                btnFinish.style.display = 'none';
-            }
             
-            document.getElementById('finalScreen').classList.remove('active');
-            document.getElementById('navControls').style.display = 'flex';
+            document.getElementById('btnBack').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            document.getElementById('btnNext').style.display = currentStep === totalSteps ? 'none' : 'block';
+            document.getElementById('btnFinish').style.display = currentStep === totalSteps ? 'block' : 'none';
         }
 
         function finishWizard() {
-            document.getElementById('finalResult').value = generatePromptString();
+            document.getElementById('finalResult').value = generateString();
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('navControls').style.display = 'none';
             document.getElementById('finalScreen').classList.add('active');
         }
 
-        function resetWizard() {
-            location.reload(); 
-        }
-
         function copyToClipboard() {
-            const copyText = document.getElementById("finalResult");
-            copyText.select();
-            if(navigator.clipboard) {
-                navigator.clipboard.writeText(copyText.value);
-            } else {
-                document.execCommand("copy");
-            }
-            // Visual feedback
+            const el = document.getElementById("finalResult");
+            el.select();
+            navigator.clipboard.writeText(el.value);
             const btn = document.querySelector('.btn-copy');
-            const originalText = btn.innerText;
-            btn.innerText = "Copied!";
-            setTimeout(() => btn.innerText = originalText, 1500);
+            const old = btn.innerText;
+            btn.innerText = "COPIED! ✅";
+            setTimeout(() => btn.innerText = old, 1500);
         }
-
-        updateUI();
     </script>
 </body>
 </html>
