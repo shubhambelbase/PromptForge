@@ -11,14 +11,14 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/Status-Ready-00ff88?style=flat-square" alt="Status" />
+    <img src="https://img.shields.io/badge/Status-Deployed-00ff88?style=flat-square" alt="Status" />
     <img src="https://img.shields.io/badge/Style-Cyberpunk%20%7C%20Neon-bc13fe?style=flat-square" alt="Style" />
     <img src="https://img.shields.io/badge/Tech-Vanilla%20JS%20%7C%20Single%20File-orange?style=flat-square" alt="Tech Stack" />
     <img src="https://img.shields.io/badge/Size-Lightweight-blue?style=flat-square" alt="Size" />
   </p>
 
   <h3>
-    <a href="#">🟢 Launch The Forge (Live Demo)</a>
+    <a href="https://promptf.netlify.app/">🟢 Launch The Forge (Live Demo)</a>
   </h3>
 </div>
 
@@ -75,4 +75,5 @@ This is a **Single File Application**. It requires no build tools, no node_modul
 <div align="center">
   <p>Vibe coded with ❤️ by <a href="https://github.com/shubhambelbase">Shubham Belbase</a></p>
 </div>
+
 
